@@ -5,8 +5,10 @@
         <script src="music.js"></script>
     </head>
     <body>
+        Time in ms: <input id="time" type="number" value="1500" />
         <h1 onclick="cancel();">TESTING STOOOOOOP!</h1>
-        <h1 onclick="playIVVIIV(1000);">TESTING I–V–vi–IV PROGRESSION!</h1>
+        <h1 onclick="toggleMelody();">TESTING MELODY TOGGLE!</h1>
+        <h1 onclick="playIVVIIV(parseInt(document.getElementById('time').value));">TESTING I–V–vi–IV PROGRESSION!</h1>
         <h1 onclick="play50sProgression(1000);">TESTING THE '50s PROGRESSION!</h1>
         <h1 onclick="playMajor(C);">TESTING THE C!</h1>
         <h1 onclick="playMajor(G);">TESTING THE G!</h1>

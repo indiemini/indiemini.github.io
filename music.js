@@ -61,6 +61,27 @@ function playMinor(chord, duration, afterTime)
 
 var timer = null;
 var lastRun = 0;
+var shouldPlayUpDown = false;
+function toggleMelody()
+{
+    shouldPlayUpDown = !shouldPlayUpDown;
+}
+function playUpDownUpDown(baseNote, noteDiff, msBetweenChords, offset)
+{
+    if (!shouldPlayUpDown) return;
+    player.queueChord(audioContext, output, guitar,
+        audioContext.currentTime + (0.0 * msBetweenChords) + offset,
+        [baseNote + 36], msBetweenChords);
+    player.queueChord(audioContext, output, guitar,
+        audioContext.currentTime + (1.0 * msBetweenChords) + offset,
+        [baseNote + 36 + noteDiff], msBetweenChords);
+    player.queueChord(audioContext, output, guitar,
+        audioContext.currentTime + (2.0 * msBetweenChords) + offset,
+        [baseNote + 36], msBetweenChords);
+    player.queueChord(audioContext, output, guitar,
+        audioContext.currentTime + (3.0 * msBetweenChords) + offset,
+        [baseNote + 36 + noteDiff], msBetweenChords);
+}
 function playIVVIIV(msBetweenChords = 2000)
 {
     // interval * four chords
@@ -79,9 +100,16 @@ function playIVVIIV(msBetweenChords = 2000)
 
     // run once before scheduling
     lastRun = Date.now();
+    playUpDownUpDown(note, 4, beatIntervalDec/4.0, 0.0);
     playMajor(note, beatIntervalDec, 0.0 * beatIntervalDec);
+
+    playUpDownUpDown(noteTwo, 4, beatIntervalDec/4.0, beatIntervalDec * 1.0);
     playMajor(noteTwo, beatIntervalDec, 1.0 * beatIntervalDec);
+
+    playUpDownUpDown(noteThree, 3, beatIntervalDec/4.0, beatIntervalDec * 2.0);
     playMinor(noteThree, beatIntervalDec, 2.0 * beatIntervalDec);
+
+    playUpDownUpDown(noteFour, 4, beatIntervalDec/4.0, beatIntervalDec * 3.0);
     playMajor(noteFour, beatIntervalDec, 3.0 * beatIntervalDec);
 
     // repeat forever!
@@ -92,9 +120,16 @@ function playIVVIIV(msBetweenChords = 2000)
         var t = msBetweenChords - marginOfErr;
         t = t / 1000.0;
         lastRun = Date.now();
+        playUpDownUpDown(note, 4, beatIntervalDec/4.0, 0.0);
         playMajor(note, t, 0.0 * beatIntervalDec);
+
+        playUpDownUpDown(noteTwo, 4, beatIntervalDec/4.0, beatIntervalDec * 1.0);
         playMajor(noteTwo, t, 1.0 * beatIntervalDec);
+
+        playUpDownUpDown(noteThree, 3, beatIntervalDec/4.0, beatIntervalDec * 2.0);
         playMinor(noteThree, t, 2.0 * beatIntervalDec);
+
+        playUpDownUpDown(noteFour, 4, beatIntervalDec/4.0, beatIntervalDec * 3.0);
         playMajor(noteFour, t, 3.0 * beatIntervalDec);
     }, repeatMs);
 }
