@@ -2,6 +2,92 @@
 <head>
 <title>@brendancoding bite-sized profile card</title>
 <meta name="theme-color" content="#862D5D">
+<script src="js/animate-vanilla-js-browser.js"></script>
+<script>
+    const getById = (id) => document.getElementById(id);
+    const animate = animateVanillaJs;
+    const opts = {
+        "discord-btn": null,
+        "twitter-btn": null,
+        "aced-btn": null,
+        "rotf-btn": null,
+    };
+    const yvals = {
+        "discord-btn": 1.0,
+        "twitter-btn": 1.0,
+        "aced-btn": 1.0,
+        "rotf-btn": 1.0,
+    };
+    const pfpOpts = { "pfp": null }
+    const pfpyvals = { "pfp": 1 }
+
+    function setupMouseOver(obj, id, proms, vals, to, upd, dur) {
+        obj.onmouseover = (ev) => {
+            var prom = proms[id];
+            if (prom != null) {
+                // an animation was already here.
+                // let's cancel it.
+                prom.cancel();
+                proms[id] = null;
+            }
+            prom = proms[id] = animate(
+                vals[id],  // from
+                to,        // to
+                dur,       // duration
+                "easeOutQuart", // easing
+                value => {
+                    // update func
+                    vals[id] = value;
+                    // set element prop
+                    upd(obj, value);
+                }
+            );
+        };
+    }
+    function setupMouseLeave(obj, id, proms, vals, to, upd, dur) {
+        obj.onmouseleave = (ev) => {
+            var prom = proms[id];
+            if (prom != null) {
+                // an animation was already here.
+                // let's cancel it.
+                prom.cancel();
+                proms[id] = null;
+            }
+            prom = proms[id] = animate(
+                vals[id],  // from
+                to,        // to
+                dur,       // duration
+                "easeOutQuart", // easing
+                value => {
+                    // update func
+                    vals[id] = value;
+                    // set element prop
+                    upd(obj, value);
+                }
+            );
+        };
+    }
+
+    window.onload = () => {
+        for (const id in opts) {
+            const btn = getById(id);
+            setupMouseOver(btn, id, opts, yvals, 1.05, (obj, val) => {
+                obj.style.transform = `scale(${val})`;
+            }, 200);
+            setupMouseLeave(btn, id, opts, yvals, 1.0, (obj, val) => {
+                obj.style.transform = `scale(${val})`;
+            }, 200);
+        }
+        const pfp = getById("pfp");
+        setupMouseOver(pfp, "pfp", pfpOpts, pfpyvals, 1.02, (obj, val) => {
+            console.log(val);
+            obj.style.transform = `scale(${val})`;
+        }, 150);
+        setupMouseLeave(pfp, "pfp", pfpOpts, pfpyvals, 1.0, (obj, val) => {
+            obj.style.transform = `scale(${val})`;
+        }, 150);
+    };
+</script>
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap');
 
@@ -38,7 +124,7 @@
     }
 
     .pfp {
-        pointer-events: none;
+        /* pointer-events: none; */
         user-select: none;
         -webkit-user-select: none;
         -moz-user-select: none;
@@ -62,7 +148,7 @@
         align-content: center;
         justify-content: center;
         flex-direction: row;
-        padding: 20px;
+        padding: 40px;
         text-align: center;
     }
     .name-label {
@@ -108,7 +194,7 @@
 <body>
     <div class="content-container">
         <div class="top-container" draggable="false">
-            <div class="pfp"></div>
+            <div id="pfp" class="pfp"></div>
         </div>
         <div class="middle-container" draggable="false">
             <div class="name-label">@brendancoding</div>
@@ -117,10 +203,10 @@
             <div class="name-label">aka miniguy</div>
         </div>
         <div class="bottom-container" draggable="false">
-            <a href="https://rotf.io/discord" target="_blank"><div class="discord-btn"></div></a>
-            <a href="https://twitter.com/brendancoding" target="_blank"><div class="twitter-btn"></div></a>
-            <a href="https://aced.gg/" target="_blank"><div class="aced-btn"></div></a>
-            <a href="https://rotf.io/" target="_blank"><div class="rotf-btn"></div></a>
+            <a href="https://rotf.io/discord" target="_blank"><div id="discord-btn" class="discord-btn"></div></a>
+            <a href="https://twitter.com/brendancoding" target="_blank"><div id="twitter-btn" class="twitter-btn"></div></a>
+            <a href="https://aced.gg/" target="_blank"><div id="aced-btn" class="aced-btn"></div></a>
+            <a href="https://rotf.io/" target="_blank"><div id="rotf-btn" class="rotf-btn"></div></a>
         </div>
     </div>
 </body>
