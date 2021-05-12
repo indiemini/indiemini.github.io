@@ -1,0 +1,312 @@
+<html>
+    <head>
+        <title>dishred</title>
+        <script src="js/utils.js?cb=122032"></script>
+        <script src="js/main.js?cb=33z6346" defer></script>
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@600&display=swap');
+        </style>
+        <style>
+            /* https://coolors.co/586ba4-324376-f5dd90-f68e5f-f76c5e */
+
+            html, body, div {
+                margin: 0;
+                padding: 0;
+            }
+            body, div {
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
+            }
+            p {
+                padding: 2em;
+            }
+            .hide {
+                display: none;
+            }
+            .container {
+                flex-direction: column;
+                background-color: #586BA4;
+                height: 100%;
+                width: 100%;
+            }
+            .top-banner {
+                width: 100%;
+                /* border: 1px solid black; */
+                border-bottom-left-radius: 4px;
+                border-bottom-right-radius: 4px;
+                color: white;
+                font-family: 'Josefin Sans', sans-serif;
+                background-color: #324376;
+                flex-direction: column;
+                flex: 20%;
+                font-size: 2em;
+            }
+            .main-content {
+                width: 100%;
+                /* border: 1px solid black; */
+                position: relative;
+                color: #111;
+                flex-direction: column;
+                flex: 80%;
+            }
+            .tutorial {
+                width: 100%;
+                /* border: 1px solid black; */
+                color: #111;
+                flex-direction: column;
+                flex: 80%;
+            }
+            .tutorial-box {
+                min-width: 200px;
+                max-width: fit-content;
+                height: 70%;
+                /* border: 1px solid #F68E5F;
+                background-color: #F68E5F; */
+                border-radius: 4px;
+                flex-direction: column;
+            }
+            .tutorial-top {
+                box-shadow: 2px 2px 5px #000000AA;
+                flex: 10%;
+                font-size: large;
+                padding: 10px;
+                padding-left: 20px;
+                padding-right: 20px;
+                border-radius: 4px;
+                background-color: #F5DD90;
+                font-family: 'Josefin Sans', sans-serif;
+            }
+            .tutorial-content {
+                flex-direction: column;
+                box-shadow: 3px 3px 5px #000000AA;
+                flex: 90%;
+                margin: 20px;
+                color: white;
+                font-size: large;
+                width: 100%;
+                border-radius: 4px;
+                background-color: #F76C5E;
+                font-family: 'Josefin Sans', sans-serif;
+            }
+            .tutorial-content:hover {
+                cursor: pointer;
+            }
+            .guess {
+                font-family: 'Josefin Sans', sans-serif;
+                border: 2px solid black;
+                margin-left: 1em;
+                margin-right: 1em;
+                padding-top: 0.5em;
+                padding-bottom: 0.5em;
+                padding-left: 1em;
+                padding-right: 1em;
+                font-size: 2em;
+                transition: all 0.2s ease;
+            }
+            .guess.zero {
+                border-color: #F5DD90;
+                background-color: #F5DD90;
+            }
+            .guess.one {
+                border-color: #F68E5F;
+                background-color: #F68E5F;
+            }
+            .guess.two {
+                border-color: #F76C5E;
+                background-color: #F76C5E;
+            }
+            .guess:hover {
+                border: 2px solid #324376;
+            }
+            #score-counter, #game-over-text {
+                color: #CCCCCCFF;
+                font-size: 16px;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            }
+            #game-over-text {
+                font-family: 'Josefin Sans', sans-serif;
+                transform: translateY(24px);
+            }
+            #word-hint {
+                transform: translateY(10px);
+                font-family: 'Josefin Sans', sans-serif;
+                font-size: 4em;
+            }
+            .clickable:hover {
+                cursor: pointer;
+            }
+            /* #timer-outline {
+                position: absolute;
+                margin: 0;
+                padding: 0;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                transition: all 1s linear;
+                pointer-events: none;
+            }
+            path {
+                stroke: #324376;
+                stroke-width: 2;
+                fill: none;
+            } */
+            #timer-canvas {
+                position: absolute;
+                pointer-events: none;
+                /* max-width: 500px;
+                max-height: 500px; */
+                width: 100%;
+                height: 100%;
+            }
+            #last-word {
+                transform: translateY(30px);
+                color: #CCCCCCFF;
+                font-family: 'Josefin Sans', sans-serif;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="main-container" class="container" onclick="playAgain()">
+            <div id="top-banner-obj" onclick="advanceTutorial(-1)" class="top-banner clickable">
+                <h1>DISHRED</h1>
+                <h6 id="click-to-start-text">(click to start)</h6>
+            </div>
+            <div id="game" class="main-content hide">
+                <!-- <svg id="timer-outline" viewBox="0 0 100 100" >
+                    <path d="M 12,12 88,12 88,88 12,88 12,11" preserveAspectRatio="none" />
+                </svg> -->
+                <canvas id="timer-canvas"></canvas>
+                <h4 id="last-word">. . .</h4>
+                <h1 id="word-hint">loading...</h1>
+                <div class="guess-options">
+                    <p onclick="onGuess(0)" class="guess zero clickable">test</p>
+                    <p onclick="onGuess(1)" class="guess one clickable">test</p>
+                    <p onclick="onGuess(2)" class="guess two clickable">test</p>
+                </div>
+                <div style="display: flex; position: relative; width: 240px; height: 80px;">
+                    <h4 style="position: absolute;" id="score-counter">Score: 0</h4>
+                    <h4 style="position: absolute;" id="game-over-text"></h4>
+                </div>
+            </div>
+            <div id="tutorial-pt-0" class="tutorial hide">
+                <div class="tutorial-box">
+                    <div class="tutorial-top">Tutorial</div>
+                    <div onclick="advanceTutorial(0)" class="tutorial-content">
+                        <p>Hey!</p>
+                        <p>This is a small guide on how to play DISHRED.</p>
+                        <p>(click to advance tutorial)</p>
+                    </div>
+                </div>
+            </div>
+            <div id="tutorial-pt-1" class="tutorial hide">
+                <div class="tutorial-box">
+                    <div class="tutorial-top">Tutorial</div>
+                    <div onclick="advanceTutorial(1)" class="tutorial-content">
+                        <p>Hey!</p>
+                        <div style="flex-direction: column; padding: 0">
+                            <p style="margin: 3; padding: 0;">
+                                You'll be given a word with three missing letters.
+                            </p>
+                            <p style="margin: 3; padding: 0; color: black;"><b>
+                                D I S H _ _ _ R E D
+                            </b></p>
+                            <p style="margin: 3; padding: 0;">
+                                 
+                            </p>
+                        </div>
+                        <p>(click to advance tutorial)</p>
+                    </div>
+                </div>
+            </div>
+            <div id="tutorial-pt-2" class="tutorial hide">
+                <div class="tutorial-box">
+                    <div class="tutorial-top">Tutorial</div>
+                    <div onclick="advanceTutorial(2)" class="tutorial-content">
+                        <p>Hey!</p>
+                        <div style="flex-direction: column; padding: 0">
+                            <p style="margin: 3; padding: 0;">
+                                You'll be given a word with three missing letters.
+                            </p>
+                            <p style="margin: 3; padding: 0; color: black;"><b>
+                                D I S H _ _ _ R E D
+                            </b></p>
+                            <p style="margin: 3; padding: 0; line-height: 1.2em;">
+                                Your job is to complete the word<br>
+                                by selecting the missing letters.
+                            </p>
+                        </div>
+                        <p>(click to advance tutorial)</p>
+                    </div>
+                </div>
+            </div>
+            <div id="tutorial-pt-3" class="tutorial hide">
+                <div class="tutorial-box">
+                    <div class="tutorial-top">Tutorial</div>
+                    <div onclick="advanceTutorial(3)" class="tutorial-content">
+                        <p>Hey!</p>
+                        <div style="flex-direction: column; padding: 0">
+                            <p style="margin: 3; padding: 0;">
+                                You'll be given a word with three missing letters.
+                            </p>
+                            <p style="margin: 3; padding: 0; color: black;"><b>
+                                D I S H _ _ _ R E D
+                            </b></p>
+                            <p style="margin: 3; padding: 0; line-height: 1.2em;">
+                                Your job is to complete the word<br>
+                                by selecting the missing letters.
+                            </p>
+                            <div style="background-color: #586BA4;">
+                                <p class="guess zero">aba</p>
+                                <p class="guess one">ono</p>
+                                <p class="guess two">aga</p>
+                            </div>
+                        </div>
+                        <p>(click to advance tutorial)</p>
+                    </div>
+                </div>
+            </div>
+            <div id="tutorial-pt-4" class="tutorial hide">
+                <div class="tutorial-box">
+                    <div class="tutorial-top">Tutorial</div>
+                    <div onclick="advanceTutorial(4)" class="tutorial-content">
+                        <p>Hey!</p>
+                        <div style="flex-direction: column; padding: 0">
+                            <p style="margin: 3; padding: 0;">
+                                You'll be given a word with three missing letters.
+                            </p>
+                            <p style="margin: 3; padding: 0; color: black;"><b>
+                                D I S H O N O R E D
+                            </b></p>
+                            <p style="margin: 3; padding: 0; line-height: 1.2em;">
+                                Your job is to complete the word<br>
+                                by selecting the missing letters.
+                            </p>
+                            <div style="background-color: #586BA4;">
+                                <p style="background-color: #586BA4;" class="guess zero">aba</p>
+                                <p class="guess one">ono</p>
+                                <p style="background-color: #586BA4;" class="guess two">aga</p>
+                            </div>
+                        </div>
+                        <p>(click to advance tutorial)</p>
+                    </div>
+                </div>
+            </div>
+            <div id="tutorial-pt-5" class="tutorial hide">
+                <div class="tutorial-box">
+                    <div class="tutorial-top">Tutorial</div>
+                    <div onclick="advanceTutorial(5)" class="tutorial-content">
+                        <p>Hey!</p>
+                        <div style="flex-direction: column; padding: 0">
+                            <p style="margin: 3; padding: 0;">Keep going until you run out of time.</p>
+                            <p style="margin: 3; padding: 0;">Answer quickly to get time back!</p>
+                        </div>
+                        <p>(click to finish tutorial)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
