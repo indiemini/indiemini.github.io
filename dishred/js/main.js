@@ -150,6 +150,8 @@ function playAgain() {
     // remove clickable class
     $("#main-container").className = "container";
     $("#game-over-text").textContent = "";
+    // reset score and start timers
+    $("#score-counter").textContent = `Score: ${score = 0}`;
     startTimer("reset");
     startSubTimer();
     newWord();
