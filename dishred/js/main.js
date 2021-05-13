@@ -303,6 +303,8 @@ function onWords(text) {
 
 function onGuess(index) {
     if (!playing) return;
+    // clear info text
+    $("#game-over-text").textContent = "";
     // with each guess, let's take
     // a little bit away from maxTime
     maxTime -= 0.2;
@@ -320,6 +322,10 @@ function onGuess(index) {
             timeLeft += addBack;
             if (timeLeft > maxTime)
                 timeLeft = maxTime;
+            if (timeTaken < 1) {
+                $("#game-over-text").textContent = `+1 for speed`;
+                score++;
+            }
             updateTimer("bonus");
         }
         else {
@@ -339,7 +345,13 @@ function onGuess(index) {
     else {
         // WRONG! lose some time.
         console.log("AAAAAAAAAAAAAFKC");
-        timeLeft -= 3;
+        // first, max time moves down
+        maxTime -= 0.8;
+        // but let's make sure the game is still playable!
+        if (maxTime < 15)
+            maxTime = 15;
+        // now, also just reduce time left
+        timeLeft -= 5;
         // increase subTimeTaken
         // to prevent player from re-gaining this time
         subTimeTaken += 5;
