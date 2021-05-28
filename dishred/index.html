@@ -3,9 +3,12 @@
         <title>dishred</title>
         <!-- <meta name="viewport" content="width=device-width, initial-scale=0.70" /> -->
         <meta name="viewport" content="width=device-width, initial-scale=0.65, user-scalable=no" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
         <script src="js/utils.js?cb=1z2gs2032"></script>
         <script src="js/main.js?cb=33z6sn3z46" defer></script>
         <link rel="manifest" href="manifest.json" />
+        <link rel="apple-touch-icon" href="assets/icon-192x192.png">
         <style>
             /* @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@600&display=swap'); */
             /* vietnamese */
@@ -50,6 +53,10 @@
                 flex-direction: row;
                 justify-content: center;
                 align-items: center;
+            }
+            body {
+                /* required for iOS PWA statusbar */
+                background-color: #324376;
             }
             p {
                 padding: 2em;
